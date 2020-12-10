@@ -1,13 +1,26 @@
 const socket = io();
 
-// Elements
+// DOM Elements
 const $messageForm = document.querySelector('#message-form');
 const $messageFormInput = $messageForm.querySelector('input');
 const $messageFormButton = $messageForm.querySelector('button');
-const $sendLocation = document.querySelector('#send-location');
+const $sendLocationButton = document.querySelector('#send-location');
+const $messages = document.querySelector('#messages');
+
+//Templates
+const messageTemplate = document.querySelector('#message-template').innerHTML;
 
 socket.on('message', (message) => {
 	console.log(message);
+	const html = Mustache.render(messageTemplate, {
+		message,
+	});
+
+	$messages.insertAdjacentHTML('beforeend', html);
+});
+
+socket.on('locationMessage', (message) => {
+	console.log(message, 'from location');
 });
 
 $messageForm.addEventListener('submit', (e) => {
@@ -26,8 +39,8 @@ $messageForm.addEventListener('submit', (e) => {
 	});
 });
 
-$sendLocation.addEventListener('click', () => {
-	$sendLocation.setAttribute('disabled', 'disabled');
+$sendLocationButton.addEventListener('click', () => {
+	$sendLocationButton.setAttribute('disabled', 'disabled');
 
 	if (!navigator.geolocation) {
 		return alert('Your browser does not support Geolocation');
@@ -42,7 +55,7 @@ $sendLocation.addEventListener('click', () => {
 			},
 			() => {
 				console.log('Location shared');
-				$sendLocation.removeAttribute('disabled');
+				$sendLocationButton.removeAttribute('disabled');
 			}
 		);
 	});
