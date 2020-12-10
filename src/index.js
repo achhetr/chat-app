@@ -3,7 +3,10 @@ const http = require('http');
 require('dotenv').config();
 const express = require('express');
 const socketio = require('socket.io');
-const { generateMessage } = require('./utils/messages');
+const {
+	generateMessage,
+	generateLocationMessage,
+} = require('./utils/messages');
 
 const app = express();
 const server = http.createServer(app);
@@ -31,7 +34,9 @@ io.on('connection', (socket) => {
 	socket.on('sendLocation', ({ latitude, longitude }, callback) => {
 		io.emit(
 			'locationMessage',
-			`https://google.com/maps?q=${latitude},${longitude}`
+			generateLocationMessage(
+				`https://google.com/maps?q=${latitude},${longitude}`
+			)
 		);
 		callback();
 	});
