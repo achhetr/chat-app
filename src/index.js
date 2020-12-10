@@ -3,7 +3,6 @@ const http = require('http');
 require('dotenv').config();
 const express = require('express');
 const socketio = require('socket.io');
-const Filter = require('bad-words');
 
 const app = express();
 const server = http.createServer(app);
@@ -21,13 +20,11 @@ io.on('connection', (socket) => {
 	socket.broadcast.emit('message', 'A new user has joined!');
 
 	socket.on('sendMessage', (message, callback) => {
-		const filter = new Filter();
-
-		if (filter.isProfane(message)) {
-			return callback('Profanity is not allowed!');
+		if (message.length > 0) {
+			io.emit('message', message);
+			return callback();
 		}
-		io.emit('message', message);
-		callback();
+		callback('No text entered');
 	});
 
 	socket.on('sendLocation', ({ latitude, longitude }, callback) => {
