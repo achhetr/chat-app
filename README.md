@@ -56,4 +56,4 @@ Pull requests are welcome :)
 
 ## License
 
-[MIT](https://github.com/achhetr/chat/blob/master/License.txt)
+[MIT](https://github.com/achhetr/chat-app/blob/master/License.txt)
