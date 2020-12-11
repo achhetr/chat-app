@@ -41,6 +41,10 @@ io.on('connection', (socket) => {
 				'message',
 				generateMessage('Chat App', `${user.username} has joined!`)
 			);
+		io.to(user.room).emit('roomData', {
+			room: user.room,
+			users: getUsersInRoom(user.room),
+		});
 		callback();
 	});
 
@@ -77,6 +81,10 @@ io.on('connection', (socket) => {
 				'message',
 				generateMessage('Chat App', `${user.username} has left!`)
 			);
+			io.to(user.room).emit('roomData', {
+				room: user.room,
+				users: getUsersInRoom(user.room),
+			});
 		}
 	});
 });
